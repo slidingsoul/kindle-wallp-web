@@ -21,7 +21,9 @@ function cspPlugin(single: boolean): Plugin {
     `script-src ${scriptSrc}`,
     `style-src ${styleSrc}`,
     "img-src 'self' blob: data:",
-    "font-src 'self'",
+    // `data:` keeps the self-hosted fonts working in the single-file build,
+    // where Vite inlines them. Neither source can open a network connection.
+    "font-src 'self' data:",
     "worker-src blob: 'self'",
     "connect-src 'none'",
     "media-src 'none'",

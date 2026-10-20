@@ -54,3 +54,74 @@ export function coverCrop(
 export function fitScale(crop: Crop, dstWidth: number): number {
   return dstWidth / crop.sw
 }
+
+/**
+ * User-controlled framing on top of the cover fit.
+ *
+ * `zoom` magnifies the covered image (1 = the whole covered area).
+ * `focusX`/`focusY` pick where the crop window sits inside the available
+ * travel: 0 pins the top/left edge, 0.5 centres it, 1 pins the bottom/right.
+ */
+export interface CropTransform {
+  zoom: number
+  focusX: number
+  focusY: number
+}
+
+export const DEFAULT_CROP: CropTransform = Object.freeze({
+  zoom: 1,
+  focusX: 0.5,
+  focusY: 0.5,
+})
+
+export const MIN_ZOOM = 1
+export const MAX_ZOOM = 6
+
+export function normalizeCrop(crop?: Partial<CropTransform> | null): CropTransform {
+  if (!crop) return DEFAULT_CROP
+  const zoom = Number.isFinite(crop.zoom) ? crop.zoom! : DEFAULT_CROP.zoom
+  const focusX = Number.isFinite(crop.focusX) ? crop.focusX! : DEFAULT_CROP.focusX
+  const focusY = Number.isFinite(crop.focusY) ? crop.focusY! : DEFAULT_CROP.focusY
+  return {
+    zoom: Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom)),
+    focusX: Math.min(1, Math.max(0, focusX)),
+    focusY: Math.min(1, Math.max(0, focusY)),
+  }
+}
+
+export function cropsEqual(a?: CropTransform | null, b?: CropTransform | null): boolean {
+  const left = normalizeCrop(a)
+  const right = normalizeCrop(b)
+  return (
+    left.zoom === right.zoom &&
+    left.focusX === right.focusX &&
+    left.focusY === right.focusY
+  )
+}
+
+/**
+ * Source rectangle for a (possibly zoomed and panned) cover crop.
+ *
+ * With the default transform this is identical to `coverCrop(..., 0.5, 0.5)`,
+ * so untransformed batches keep the CLI-parity output.
+ */
+export function cropRect(
+  srcWidth: number,
+  srcHeight: number,
+  dstWidth: number,
+  dstHeight: number,
+  transform: CropTransform = DEFAULT_CROP,
+): Crop {
+  const base = coverCrop(srcWidth, srcHeight, dstWidth, dstHeight)
+  const { zoom, focusX, focusY } = normalizeCrop(transform)
+
+  const sw = base.sw / zoom
+  const sh = base.sh / zoom
+
+  return {
+    sw,
+    sh,
+    sx: (srcWidth - sw) * focusX,
+    sy: (srcHeight - sh) * focusY,
+  }
+}

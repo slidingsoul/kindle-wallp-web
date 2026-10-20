@@ -1,0 +1,246 @@
+import { LegalLayout, type LegalSectionLink } from '../components/LegalLayout'
+
+const SECTIONS: LegalSectionLink[] = [
+  { id: 'who-we-are', title: 'Who we are' },
+  { id: 'what-we-collect', title: 'What we collect' },
+  { id: 'your-images', title: 'Your images' },
+  { id: 'local-storage', title: 'Storage on your device' },
+  { id: 'hosting-logs', title: 'Hosting logs' },
+  { id: 'cookies', title: 'Cookies and tracking' },
+  { id: 'sharing', title: 'Sharing and transfers' },
+  { id: 'retention', title: 'How long we keep data' },
+  { id: 'rights', title: 'Your rights' },
+  { id: 'children', title: 'Children' },
+  { id: 'changes', title: 'Changes to this policy' },
+  { id: 'contact', title: 'Contact' },
+]
+
+const ISSUES = 'https://github.com/slidingsoul/kindle-wallp-web/issues'
+
+export function PrivacyPolicy() {
+  return (
+    <LegalLayout
+      base="privacy"
+      eyebrow="Legal"
+      title="Privacy Policy"
+      updated="20 October 2026"
+      summary="kwallp resizes images inside your browser. Your photos are never uploaded, and we do not run accounts, analytics, advertising or tracking. This page explains the small amount of data that is still involved — which is close to nothing."
+      sections={SECTIONS}
+      otherPolicy={{ href: '#/terms', label: 'Read the Terms of Service' }}
+    >
+      <section id="who-we-are" aria-labelledby="who-we-are-title">
+        <h2 id="who-we-are-title">Who we are</h2>
+        <p>
+          kwallp is an independent, open-source project that builds
+          browser-based tools for e-reader owners. For the purposes of the GDPR
+          and UK GDPR, the kwallp project is the controller for the limited
+          processing described below. You can reach us through the project&apos;s
+          issue tracker at{' '}
+          <a href={ISSUES} rel="noreferrer">
+            github.com/slidingsoul/kindle-wallp-web/issues
+          </a>
+          .
+        </p>
+      </section>
+
+      <section id="what-we-collect" aria-labelledby="what-we-collect-title">
+        <h2 id="what-we-collect-title">What we collect</h2>
+        <p>
+          <strong>Nothing through the converter.</strong> There is no sign-up,
+          no account and no newsletter. We do not ask for your name, email
+          address or payment details, and we do not receive your images, file
+          names, device choice or framing settings.
+        </p>
+        <p>
+          The only thing kwallp stores is a preference in your own browser (see{' '}
+          <a href="#/privacy#local-storage">Storage on your device</a>). When you
+          load the hosted site, the hosting provider may record standard
+          technical information (see{' '}
+          <a href="#/privacy#hosting-logs">Hosting logs</a>).
+        </p>
+      </section>
+
+      <section id="your-images" aria-labelledby="your-images-title">
+        <h2 id="your-images-title">Your images</h2>
+        <p>
+          Images you add are read through the browser&apos;s File API and
+          decoded, cropped, resized and encoded inside the tab, partly in a Web
+          Worker. They are held in memory and as temporary <code>blob:</code>{' '}
+          URLs that only your browser can read. Nothing is sent to a server.
+        </p>
+        <p>
+          Production builds also ship a Content-Security-Policy with{' '}
+          <code>connect-src &apos;none&apos;</code>, which blocks{' '}
+          <code>fetch</code>, <code>XMLHttpRequest</code>, WebSockets and
+          beacons. That is a technical guarantee on top of the promise.
+        </p>
+        <p>
+          Removing an image from the queue, or closing the tab, discards it. We
+          never receive a copy, so there is nothing for us to delete.
+        </p>
+      </section>
+
+      <section id="local-storage" aria-labelledby="local-storage-title">
+        <h2 id="local-storage-title">Storage on your device</h2>
+        <p>
+          kwallp saves one <code>localStorage</code> key,{' '}
+          <code>kwallp:settings</code>. It contains two values: the device model
+          you selected and whether grayscale is switched on. It stays in your
+          browser until you clear site data. It is never sent anywhere and it
+          contains no images or file names.
+        </p>
+        <p>
+          In private browsing, storage may be discarded when the window closes.
+          You can delete the key at any time in your browser&apos;s site-data
+          settings.
+        </p>
+      </section>
+
+      <section id="hosting-logs" aria-labelledby="hosting-logs-title">
+        <h2 id="hosting-logs-title">Hosting logs</h2>
+        <p>
+          The hosted version is served as static files by a hosting provider.
+          Like most web servers, it may automatically log the IP address, user
+          agent, requested URL and time of each request for delivery, security
+          and abuse prevention. Those logs are generated by the provider, not by
+          kwallp, and we do not use them for analytics, advertising or
+          profiling. They cannot contain your images or file names, because
+          those never leave your browser.
+        </p>
+        <p>
+          Where this processing applies, we rely on our legitimate interests in
+          operating a secure, available website (GDPR Article 6(1)(f)).
+          Retention is controlled by the hosting provider&apos;s policy; we do
+          not keep a separate copy.
+        </p>
+        <p>
+          The single-file build has no server component at all: if you open it
+          from disk, no hosting logs exist.
+        </p>
+      </section>
+
+      <section id="cookies" aria-labelledby="cookies-title">
+        <h2 id="cookies-title">Cookies and tracking</h2>
+        <p>
+          <strong>kwallp sets no cookies.</strong> We do not use analytics,
+          advertising pixels, social embeds, session recording or
+          fingerprinting, and we do not load fonts or scripts from third
+          parties. That is why you will not see a consent banner.
+        </p>
+        <p>
+          The hosting provider may set strictly necessary cookies for security
+          or load balancing. Those do not require consent and are not used to
+          build a profile.
+        </p>
+      </section>
+
+      <section id="sharing" aria-labelledby="sharing-title">
+        <h2 id="sharing-title">Sharing and transfers</h2>
+        <p>
+          <strong>
+            We do not sell or share personal information
+          </strong>{' '}
+          as those terms are defined by the CCPA/CPRA, and we do not disclose it
+          for cross-context behavioural advertising.
+        </p>
+        <p>
+          The only recipients involved are the hosting provider, which processes
+          request logs on our behalf to deliver the site, and GitHub, if you
+          choose to open an issue — in which case GitHub&apos;s own privacy
+          statement applies.
+        </p>
+        <p>
+          Because the hosting provider and GitHub operate globally, request data
+          may be processed outside your country, including in the United States.
+          Those providers rely on appropriate safeguards such as Standard
+          Contractual Clauses. We will not transfer anything else, because we
+          hold nothing else.
+        </p>
+      </section>
+
+      <section id="retention" aria-labelledby="retention-title">
+        <h2 id="retention-title">How long we keep data</h2>
+        <ul>
+          <li>
+            <strong>Images and file names:</strong> only in your tab&apos;s
+            memory. They disappear when you remove them or close the tab.
+          </li>
+          <li>
+            <strong>Settings:</strong> in <code>localStorage</code> until you
+            clear site data or delete the key.
+          </li>
+          <li>
+            <strong>Server logs:</strong> retained according to the hosting
+            provider&apos;s policy.
+          </li>
+        </ul>
+        <p>
+          We do not maintain a separate database, backup or archive of user
+          data.
+        </p>
+      </section>
+
+      <section id="rights" aria-labelledby="rights-title">
+        <h2 id="rights-title">Your rights</h2>
+        <p>
+          If you are in the EEA, UK or Switzerland, you have the right to access,
+          rectify, erase, restrict or object to processing, and to data
+          portability. Where processing relies on consent, you can withdraw it at
+          any time. You can also lodge a complaint with your local supervisory
+          authority.
+        </p>
+        <p>
+          If you are a California resident, you have the right to know, delete,
+          correct, and opt out of the sale or sharing of personal information,
+          and to non-discrimination for exercising those rights. We do not sell
+          or share personal information.
+        </p>
+        <p>
+          Because the converter does not transmit personal data, we may hold
+          nothing that can be accessed or deleted. We will still confirm that in
+          writing if you ask. To make a request, open an issue at{' '}
+          <a href={ISSUES} rel="noreferrer">
+            github.com/slidingsoul/kindle-wallp-web/issues
+          </a>{' '}
+          with the subject &ldquo;Privacy request&rdquo;. We aim to respond
+          within one month (GDPR) or 45 days (CCPA).
+        </p>
+      </section>
+
+      <section id="children" aria-labelledby="children-title">
+        <h2 id="children-title">Children</h2>
+        <p>
+          kwallp is a general-audience tool and is not directed to children under
+          13 (or under 16 in the EEA and UK). We do not knowingly collect
+          personal information from children. If you believe a child has sent us
+          personal data through the issue tracker, contact us and we will delete
+          it.
+        </p>
+      </section>
+
+      <section id="changes" aria-labelledby="changes-title">
+        <h2 id="changes-title">Changes to this policy</h2>
+        <p>
+          We may update this policy when the service or the law changes. The
+          date at the top always reflects the current version. For material
+          changes we will add a notice on this site before they take effect.
+          Continuing to use kwallp after a change means you accept the updated
+          policy.
+        </p>
+      </section>
+
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Contact</h2>
+        <p>
+          Open an issue at{' '}
+          <a href={ISSUES} rel="noreferrer">
+            github.com/slidingsoul/kindle-wallp-web/issues
+          </a>
+          . Please do not include sensitive personal data in a public issue —
+          tell us what you need and we will arrange a private channel if
+          necessary.
+        </p>
+      </section>
+    </LegalLayout>
+  )
+}

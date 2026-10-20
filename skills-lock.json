@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "write-privacy-policy": {
+      "source": "jeffreytse/grimoire-core",
+      "sourceType": "github",
+      "skillPath": "skills/law/privacy/skills/write-privacy-policy/SKILL.md",
+      "computedHash": "00689ec6faa2e2184d898f110308d7246c60c992827e1fcdbf7d553967e5aecc"
+    }
+  }
+}

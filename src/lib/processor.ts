@@ -1,7 +1,15 @@
 import ResizeWorker from './resize.worker?worker&inline'
 import { toArrayBuffer } from './bytes'
 import { processBlob } from './pipeline'
+import type { CropTransform } from './geometry'
 import type { WorkerResponse } from './types'
+
+export interface ImageProcessOptions {
+  width: number
+  height: number
+  grayscale: boolean
+  crop?: CropTransform
+}
 
 export interface ProcessedImage {
   png: Uint8Array
@@ -26,7 +34,7 @@ export class ImageProcessor {
 
   async process(
     file: File,
-    options: { width: number; height: number; grayscale: boolean },
+    options: ImageProcessOptions,
   ): Promise<ProcessedImage> {
     const worker = this.ensureWorker()
 

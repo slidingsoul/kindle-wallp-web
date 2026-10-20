@@ -1,12 +1,14 @@
 import { decodeImage, renderCover } from './render'
 import { rgbaToGrayscale, rgbaToRgb } from './luma'
-import { coverCrop } from './geometry'
+import { cropRect, type CropTransform } from './geometry'
 import { encodePng, type PngChannels } from './png'
 
 export interface ProcessOptions {
   width: number
   height: number
   grayscale: boolean
+  /** Optional user framing; omitted means the centred cover crop. */
+  crop?: CropTransform
 }
 
 export interface ProcessResult {
@@ -23,12 +25,12 @@ export interface ProcessResult {
  */
 export async function processBlob(
   file: Blob,
-  { width, height, grayscale }: ProcessOptions,
+  { width, height, grayscale, crop: transform }: ProcessOptions,
 ): Promise<ProcessResult> {
   const bitmap = await decodeImage(file)
 
   try {
-    const crop = coverCrop(bitmap.width, bitmap.height, width, height)
+    const crop = cropRect(bitmap.width, bitmap.height, width, height, transform)
     const canvas = renderCover(bitmap, crop, width, height)
 
     try {

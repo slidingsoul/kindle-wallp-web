@@ -16,7 +16,8 @@ test('single-file build processes images from file:// with no network', async ({
   page.on('request', (request) => requests.push(request.url()))
 
   await page.goto(pathToFileURL(singleFile).href)
-  await expect(page.locator('h1')).toHaveText('kwallp')
+  await expect(page.locator('.brand').first()).toContainText('kwallp')
+  await expect(page).toHaveTitle(/kwallp/)
 
   await page.setInputFiles(
     'input[type=file]:not([webkitdirectory])',

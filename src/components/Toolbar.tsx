@@ -3,9 +3,6 @@ import type { BatchStats, SaveState } from '../hooks/useBatch'
 interface ToolbarProps {
   stats: BatchStats
   saveState: SaveState
-  canSaveToFolder: boolean
-  onDownloadAll: () => void
-  onSaveAll: () => void
   onReprocess: () => void
   onClear: () => void
 }
@@ -13,15 +10,14 @@ interface ToolbarProps {
 export function Toolbar({
   stats,
   saveState,
-  canSaveToFolder,
-  onDownloadAll,
-  onSaveAll,
   onReprocess,
   onClear,
 }: ToolbarProps) {
+  if (stats.total === 0) return null
+
   const busy = stats.processing || stats.pending > 0
   const finished = stats.done + stats.failed
-  const percent = stats.total === 0 ? 0 : Math.round((finished / stats.total) * 100)
+  const percent = Math.round((finished / stats.total) * 100)
 
   return (
     <div className="toolbar">
@@ -49,27 +45,9 @@ export function Toolbar({
             type="button"
             className="btn btn--small"
             onClick={onReprocess}
-            disabled={busy || stats.total === 0}
+            disabled={busy || saveState.running}
           >
             Reprocess
-          </button>
-          {canSaveToFolder && (
-            <button
-              type="button"
-              className="btn btn--small"
-              onClick={onSaveAll}
-              disabled={busy || stats.done === 0 || saveState.running}
-            >
-              Save to folder…
-            </button>
-          )}
-          <button
-            type="button"
-            className="btn btn--small btn--primary"
-            onClick={onDownloadAll}
-            disabled={busy || stats.done === 0 || saveState.running}
-          >
-            Download ZIP
           </button>
           <button
             type="button"
@@ -88,7 +66,11 @@ export function Toolbar({
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuenow={saveState.running ? Math.round((saveState.done / Math.max(1, saveState.total)) * 100) : percent}
+          aria-valuenow={
+            saveState.running
+              ? Math.round((saveState.done / Math.max(1, saveState.total)) * 100)
+              : percent
+          }
           aria-label={saveState.running ? 'Saving images' : 'Resizing images'}
         >
           <span

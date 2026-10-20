@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { coverCrop, fitScale } from '../src/lib/geometry'
+import {
+  coverCrop,
+  cropRect,
+  cropsEqual,
+  fitScale,
+  normalizeCrop,
+} from '../src/lib/geometry'
 
 describe('coverCrop', () => {
   it('crops the sides when the source is wider than the target', () => {
@@ -49,5 +55,83 @@ describe('coverCrop', () => {
   it('rejects invalid dimensions and centering', () => {
     expect(() => coverCrop(0, 100, 10, 10)).toThrow()
     expect(() => coverCrop(100, 100, 100, 100, 1.5, 0.5)).toThrow()
+  })
+})
+
+describe('cropRect', () => {
+  const cases: [number, number, number, number][] = [
+    [4000, 3000, 1860, 2480],
+    [1000, 2000, 1000, 1000],
+    [1200, 1600, 1200, 1600],
+    [500, 500, 1000, 1000],
+    [1080, 1440, 1072, 1448],
+  ]
+
+  it('matches the centred cover crop by default', () => {
+    for (const [sw, sh, dw, dh] of cases) {
+      expect(cropRect(sw, sh, dw, dh)).toEqual(coverCrop(sw, sh, dw, dh))
+      expect(cropRect(sw, sh, dw, dh, normalizeCrop(null))).toEqual(
+        coverCrop(sw, sh, dw, dh),
+      )
+    }
+  })
+
+  it('zooming in shrinks the sampled rectangle', () => {
+    const base = cropRect(4000, 3000, 1860, 2480)
+    const zoomed = cropRect(4000, 3000, 1860, 2480, {
+      zoom: 2,
+      focusX: 0.5,
+      focusY: 0.5,
+    })
+
+    expect(zoomed.sw).toBeCloseTo(base.sw / 2, 6)
+    expect(zoomed.sh).toBeCloseTo(base.sh / 2, 6)
+    // The centre of the crop is unchanged.
+    expect(zoomed.sx + zoomed.sw / 2).toBeCloseTo(base.sx + base.sw / 2, 6)
+    expect(zoomed.sy + zoomed.sh / 2).toBeCloseTo(base.sy + base.sh / 2, 6)
+  })
+
+  it('pins to the edges at focus 0 and 1', () => {
+    const left = cropRect(4000, 3000, 1860, 2480, {
+      zoom: 2,
+      focusX: 0,
+      focusY: 0,
+    })
+    const right = cropRect(4000, 3000, 1860, 2480, {
+      zoom: 2,
+      focusX: 1,
+      focusY: 1,
+    })
+
+    expect(left.sx).toBe(0)
+    expect(left.sy).toBe(0)
+    expect(right.sx + right.sw).toBeCloseTo(4000, 6)
+    expect(right.sy + right.sh).toBeCloseTo(3000, 6)
+  })
+
+  it('clamps out-of-range framing instead of producing empty crops', () => {
+    const crop = cropRect(1000, 2000, 1000, 1000, {
+      zoom: 100,
+      focusX: 4,
+      focusY: -2,
+    })
+    const tidy = normalizeCrop({ zoom: 100, focusX: 4, focusY: -2 })
+
+    expect(tidy.zoom).toBe(6)
+    expect(tidy.focusX).toBe(1)
+    expect(tidy.focusY).toBe(0)
+    expect(crop.sw).toBeCloseTo(1000 / 6, 6)
+    expect(crop.sx).toBeCloseTo(1000 - crop.sw, 6)
+    expect(crop.sy).toBe(0)
+  })
+
+  it('compares transforms after normalising them', () => {
+    expect(cropsEqual(undefined, { zoom: 1, focusX: 0.5, focusY: 0.5 })).toBe(true)
+    expect(
+      cropsEqual(
+        { zoom: 1, focusX: 0.5, focusY: 0.5 },
+        { zoom: 2, focusX: 0.5, focusY: 0.5 },
+      ),
+    ).toBe(false)
   })
 })

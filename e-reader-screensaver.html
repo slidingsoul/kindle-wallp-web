@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Reader Screensaver — Create perfect e-reader wallpapers</title>
+<meta name="description" content="Free online tool to resize and crop images to the exact screen size of 20 Kindle, Kobo, Boox and reMarkable models. Nothing is uploaded, no watermark, no sign-up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F8F7F3;
+    --surface: #F1EEE4;
+    --surface-2: #EAE6D9;
+    --fg: #223935;
+    --muted: #5F6862;
+    --border: #DCD8CA;
+    --accent: #5E6345;
+    --sage: #9EADAC;
+    --khaki: #BEBFA3;
+    --tan: #C0B47F;
+    --pine: #223935;
+    --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+    --font-body: "Karla", "Avenir Next", "Segoe UI", sans-serif;
+    --radius: 20px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--fg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer}
+  [hidden]{display:none !important}
+
+  .wrap{width:min(1160px,92vw);margin-inline:auto}
+
+  /* ---------- type ---------- */
+  .kicker{
+    font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--accent);
+  }
+  h1,.display{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(40px,5.4vw,62px);line-height:1.06;letter-spacing:-.015em;
+  }
+  h2{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(28px,3.4vw,42px);line-height:1.12;letter-spacing:-.01em;
+  }
+  h3{font-family:var(--font-display);font-weight:600;font-size:20px;line-height:1.25}
+  .lead{font-size:17px;line-height:1.7;color:var(--muted);max-width:56ch}
+  .caps{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+  small{font-size:12.5px;line-height:1.5}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    min-height:48px;padding:0 22px;border-radius:12px;border:1px solid transparent;
+    font-weight:600;font-size:15px;letter-spacing:.02em;
+    transition:transform .18s ease,background .18s ease,box-shadow .18s ease,border-color .18s ease,color .18s ease;
+  }
+  .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{
+    outline:none;box-shadow:0 0 0 3px var(--bg),0 0 0 6px color-mix(in oklch,var(--accent) 45%, transparent);
+  }
+  .btn-primary{
+    background:var(--accent);color:#F8F7F3;box-shadow:0 1px 2px rgba(34,57,53,.14);
+  }
+  .btn-primary:hover{
+    background:color-mix(in oklch,var(--accent) 88%, white 12%);
+    transform:translateY(-1px);box-shadow:0 6px 18px rgba(34,57,53,.18);
+  }
+  .btn-primary:active{transform:translateY(0)}
+  .btn-primary[disabled]{background:var(--border);color:var(--muted);cursor:not-allowed;box-shadow:none;transform:none}
+  .btn-ghost{background:transparent;color:var(--fg);border-color:var(--border)}
+  .btn-ghost:hover{background:var(--surface);border-color:color-mix(in oklch,var(--fg) 30%, var(--border))}
+  .btn-invert{background:var(--bg);color:var(--pine)}
+  .btn-invert:hover{background:var(--surface);transform:translateY(-1px)}
+
+  /* ---------- nav ---------- */
+  header.site-nav{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in oklch,var(--bg) 88%, transparent);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex;align-items:center;gap:24px;height:68px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
+  .brand svg{width:26px;height:26px}
+  .nav-links{display:flex;gap:26px;margin-left:auto;font-size:14.5px;font-weight:600}
+  .nav-links a{color:var(--muted);transition:color .18s ease}
+  .nav-links a:hover{color:var(--fg)}
+  .nav-cta{margin-left:6px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:76px 0 84px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .hero .kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);margin-bottom:26px}
+  .hero h1{margin:0 0 20px;max-width:15ch}
+  .hero .lead{margin-bottom:32px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+  .trust{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:26px;border-top:1px solid var(--border)}
+  .trust li{list-style:none;display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--muted)}
+  .trust svg{width:17px;height:17px;color:var(--accent);flex:none}
+
+  .hero-visual{position:relative;display:flex;justify-content:center}
+  .hero-visual::before{
+    content:"";position:absolute;inset:4% 6% -10%;z-index:0;border-radius:50%;
+    background:radial-gradient(closest-side, color-mix(in oklch,var(--tan) 28%, transparent), transparent 72%);
+  }
+  .device{
+    position:relative;z-index:1;width:min(360px,76vw);aspect-ratio:3/4.4;border-radius:34px;
+    background:var(--pine);padding:13px 13px 26px;
+    box-shadow:0 30px 60px -18px rgba(34,57,53,.45),0 2px 0 rgba(255,255,255,.12) inset;
+  }
+  .device .screen{border-radius:22px;overflow:hidden;height:100%;position:relative;background:#14231f}
+  .device .screen svg{width:100%;height:100%}
+  .forest{width:100%;height:100%}
+  .device .dot{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:#55635e}
+  .device-badge{
+    position:absolute;z-index:3;left:22px;top:22px;
+    background:color-mix(in oklch,var(--bg) 86%, transparent);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 28px -10px rgba(34,57,53,.35);
+    padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;
+  }
+  .device-badge svg{width:20px;height:20px;color:var(--accent)}
+
+  /* ---------- resizer ---------- */
+  .resizer{padding:32px 0 96px;scroll-margin-top:84px}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 48px}
+  .section-head .kicker{display:inline-block;margin-bottom:18px}
+  .section-head h2{margin-bottom:14px}
+  .section-head p{margin-inline:auto}
+
+  .tool{
+    background:var(--surface);border:1px solid var(--border);border-radius:24px;
+    box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 24px 48px -30px rgba(34,57,53,.25);
+    padding:30px;position:relative;overflow:hidden;
+  }
+  .tool::before{content:"";position:absolute;inset:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--sage));opacity:.85}
+  .tool-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--border);margin-bottom:26px}
+  .tool-status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;background:var(--bg);font-size:13.5px;font-weight:600;color:var(--muted)}
+  .tool-status b{color:var(--fg)}
+  .tool-status .pulse{width:8px;height:8px;border-radius:50%;background:var(--sage)}
+  .tool-col{display:grid;grid-template-columns:340px 1fr;gap:30px}
+
+  .step-label{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+  .step-label .num{
+    font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--tan);
+    border:1px solid color-mix(in oklch,var(--tan) 40%, var(--border));width:26px;height:26px;
+    display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
+  }
+  .step-label h3{font-size:17px}
+  .step-desc{color:var(--muted);font-size:13.5px;margin-left:36px;margin-top:-8px;margin-bottom:18px}
+
+  .chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .chip{
+    text-align:left;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;
+    padding:11px 12px;transition:border-color .16s ease,background .16s ease,transform .16s ease;
+  }
+  .chip:hover{border-color:color-mix(in oklch,var(--accent) 55%, var(--border));transform:translateY(-1px)}
+  .chip .nm{font-weight:600;font-size:13.5px;line-height:1.3}
+  .chip .sc{color:var(--muted);font-size:11.5px;letter-spacing:.02em}
+  .chip[aria-pressed="true"]{
+    background:color-mix(in oklch,var(--accent) 8%, var(--bg));
+    border-color:var(--accent);
+  }
+  .chip[aria-pressed="true"] .nm{color:var(--accent)}
+  .chip[aria-pressed="true"] .sc{color:color-mix(in oklch,var(--muted) 70%, var(--accent))}
+
+  .custom-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .field label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .field input{
+    width:100%;min-height:44px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;
+    background:var(--bg);font-size:14.5px;font-weight:600;color:var(--fg);font-family:inherit;
+  }
+  .field input:focus{box-shadow:0 0 0 3px var(--bg),0 0 0 6px color-mix(in oklch,var(--accent) 45%,transparent)}
+  .field input[type=number]::-webkit-inner-spin-button{opacity:1}
+
+  .dropzone{
+    margin-top:12px;border:1.5px dashed color-mix(in oklch,var(--accent) 45%, var(--border));
+    background:var(--bg);border-radius:16px;padding:34px 22px;text-align:center;cursor:pointer;
+    transition:border-color .16s ease,background .16s ease,transform .16s ease;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .dropzone:hover,.dropzone.drag{border-color:var(--accent);background:color-mix(in oklch,var(--accent) 5%, var(--bg))}
+  .dropzone svg{width:38px;height:38px;color:var(--accent);opacity:.9}
+  .dropzone .dz-title{font-weight:600;font-size:15.5px}
+  .dropzone .dz-sub{color:var(--muted);font-size:13px}
+  .dropzone .dz-cell{font-size:12px;color:var(--muted);letter-spacing:.02em}
+
+  .preview-wrap{display:none}
+  .preview-wrap.on{display:block}
+  .preview-frame-wrap{display:flex;justify-content:center}
+  .frame{
+    position:relative;aspect-ratio:1072/1448;max-height:440px;max-width:100%;
+    border-radius:14px;overflow:hidden;background:#101816;
+    box-shadow:0 18px 40px -18px rgba(34,57,53,.4),0 0 0 1px var(--border) inset;
+    cursor:grab;user-select:none;touch-action:none;
+  }
+  .frame:active{cursor:grabbing}
+  .frame canvas{position:absolute;inset:0;width:100%;height:100%}
+  .frame .hint{
+    position:absolute;left:12px;bottom:12px;z-index:2;
+    background:color-mix(in oklch,var(--pine) 78%, transparent);color:#EDF0E6;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:7px 11px;border-radius:999px;
+  }
+  .edit-row{display:flex;align-items:center;gap:14px;margin-top:18px;flex-wrap:wrap}
+  .zoom-btn{
+    width:44px;height:44px;flex:none;border-radius:11px;border:1px solid var(--border);background:var(--bg);
+    display:inline-flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;color:var(--fg);
+    transition:background .16s ease,border-color .16s ease;
+  }
+  .zoom-btn:hover{background:var(--surface);border-color:color-mix(in oklch,var(--fg) 30%, var(--border))}
+  .zoom-btn svg{width:16px;height:16px}
+  input[type=range].zoom-range{flex:1;min-width:140px;accent-color:var(--accent);height:4px;cursor:pointer}
+  .zoom-readout{font-size:13px;font-weight:700;color:var(--muted);width:44px;text-align:center;font-variant-numeric:tabular-nums}
+  .reset-link{font-size:13px;font-weight:600;color:var(--accent);background:none;border:none;padding:6px}
+  .reset-link:hover{text-decoration:underline}
+  .file-meta{margin-top:12px;font-size:13px;color:var(--muted)}
+  .file-meta b{color:var(--fg);font-weight:600}
+  .dl-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:26px;padding-top:24px;border-top:1px solid var(--border)}
+  .dl-bar .dims{font-size:15px;font-weight:600}
+  .dl-bar .dims small{display:block;color:var(--muted);font-weight:500;font-size:12.5px}
+  .dl-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .err-msg{color:#8a3d2b;font-size:13px;font-weight:600;margin-top:10px;min-height:1em}
+
+  /* ---------- how it works ---------- */
+  .how{padding:96px 0;scroll-margin-top:84px}
+  .how .section-head{margin-bottom:56px}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .step-card{
+    background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:26px 24px;
+    position:relative;transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .step-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(34,57,53,.28)}
+  .step-card::after{
+    content:attr(data-step);position:absolute;top:22px;right:24px;
+    font-family:var(--font-display);font-size:44px;font-weight:600;color:color-mix(in oklch,var(--khaki) 55%, transparent);letter-spacing:-.02em;
+  }
+  .step-card .ico{width:44px;height:44px;border-radius:12px;background:color-mix(in oklch,var(--accent) 10%, var(--bg));display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .step-card .ico svg{width:22px;height:22px;color:var(--accent)}
+  .step-card h3{margin-bottom:8px}
+  .step-card p{font-size:14px;color:var(--muted);line-height:1.65}
+
+  .device-strip{
+    margin-top:64px;background:var(--pine);color:#EDF0E6;border-radius:22px;
+    padding:36px 40px;display:flex;align-items:center;gap:40px;justify-content:space-between;flex-wrap:wrap;
+  }
+  .device-strip h3{color:#F4F1E2;font-size:24px;margin-bottom:6px}
+  .device-strip p{color:#BCC6B9;font-size:14.5px;max-width:52ch}
+  .device-chips{display:flex;gap:10px;flex-wrap:wrap;max-width:520px}
+  .dchip{
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#DCE2D5;
+    font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:8px 14px;border-radius:999px;
+  }
+
+  /* ---------- faq ---------- */
+  .faq{padding:96px 0;scroll-margin-top:84px}
+  .faq-grid{display:grid;grid-template-columns:340px 1fr;gap:64px}
+  .faq-intro .kicker{margin-bottom:18px}
+  .faq-intro h2{margin-bottom:16px}
+  .faq-intro p{color:var(--muted);font-size:15.5px;margin-bottom:26px}
+  .faq-intro a{color:var(--accent);font-weight:600;text-decoration:underline}
+  .faq-intro a:hover{text-decoration-thickness:2px}
+  details.faq-item{border-top:1px solid var(--border)}
+  details.faq-item:last-of-type{border-bottom:1px solid var(--border)}
+  details.faq-item summary{
+    list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:22px 6px 22px 0;font-weight:600;font-size:16px;color:var(--fg);
+  }
+  details.faq-item summary::-webkit-details-marker{display:none}
+  details.faq-item summary:hover{color:var(--accent)}
+  details.faq-item .plus{width:26px;height:26px;flex:none;border:1.5px solid var(--border);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:transform .22s ease,background .22s ease,border-color .22s ease}
+  details.faq-item .plus svg{width:12px;height:12px;color:var(--accent)}
+  details[open] .plus{transform:rotate(45deg);background:color-mix(in oklch,var(--accent) 8%, var(--bg));border-color:color-mix(in oklch,var(--accent) 50%, var(--border))}
+  details.faq-item .ans{color:var(--muted);font-size:14.5px;line-height:1.7;padding:0 40px 24px 0;max-width:70ch}
+  details.faq-item .ans ol{padding-left:20px;display:grid;gap:6px}
+  details.faq-item .ans b{color:var(--fg)}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:96px;background:var(--pine);color:#CBD3C6;position:relative;overflow:hidden}
+  footer::before{content:"";position:absolute;inset:0;height:3px;background:linear-gradient(90deg,var(--tan),var(--sage),var(--accent));opacity:.6}
+  .foot-inner{max-width:1160px;margin-inline:auto;padding:64px 4vw 44px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px}
+  .foot-brand .brand{color:#F4F1E2;margin-bottom:16px}
+  .foot-brand p{font-size:14px;line-height:1.7;max-width:38ch;color:#AEB8AA}
+  .foot-col h4{color:#F0EBD6;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+  .foot-col a{display:block;font-size:14.5px;color:#C9D2C4;padding:6px 0;transition:color .16s ease}
+  .foot-col a:hover{color:#F4F1E2}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:#96A293}
+  .foot-bottom p{display:flex;gap:18px;flex-wrap:wrap;scroll-margin-top:84px}
+  .foot-bottom a{color:#AEB8AA}
+  .foot-bottom a:hover{color:#F4F1E2}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1000px){
+    .hero-grid{grid-template-columns:1fr;gap:60px}
+    .hero-visual{order:-1;max-width:340px;margin-inline:auto;width:100%}
+    .tool-col{grid-template-columns:1fr;gap:36px}
+    .steps{grid-template-columns:1fr 1fr}
+    .faq-grid{grid-template-columns:1fr;gap:40px}
+    .foot-inner{grid-template-columns:1fr 1fr;gap:40px}
+  }
+  @media (max-width:680px){
+    .nav-links{display:none}
+    .hero{padding:56px 0 64px}
+    .steps{grid-template-columns:1fr}
+    .foot-inner{grid-template-columns:1fr;gap:32px}
+    .tool{padding:20px}
+    .device-strip{padding:30px 26px}
+  }
+</style>
+</head>
+<body id="top">
+
+<!-- ================= NAV ================= -->
+<header class="site-nav" data-od-id="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="E-Reader Screensaver home">
+      <svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="2" width="20" height="22" rx="3.5" stroke="currentColor" stroke-width="1.9"/><rect x="6" y="5.5" width="14" height="13" rx="1.6" fill="currentColor" opacity=".12"/><path d="M6 10.5h14M6 14h14" stroke="currentColor" stroke-width="1.6" opacity=".55"/><circle cx="19" cy="21.2" r="1.1" fill="currentColor"/></svg>
+      E-Reader Screensaver
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#resize" class="btn btn-ghost nav-cta" data-od-id="nav-cta-resize">Convert a photo <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" data-od-id="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kicker" data-od-id="hero-badge"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2.8 3.2A5 5 0 1 0 6.5 11.8 5 5 0 0 0 2.8 3.2Z" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="7.3" cy="5.6" r="2.6" fill="currentColor" opacity=".85"/></svg>Free · private · no sign-up</p>
+      <h1>Create perfect e-reader screensavers &amp; wallpapers</h1>
+      <p class="lead">Resize and crop any photo to the exact screen of your Kindle, Kobo, Boox or reMarkable — in your browser. Nothing is uploaded, nothing gets stretched, and your image never leaves your device.</p>
+      <div class="hero-cta">
+        <a href="#resize" class="btn btn-primary" data-od-id="hero-cta-resize">Start resizing</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <ul class="trust" aria-label="Highlights">
+        <li><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.2" stroke="currentColor" stroke-width="1.6"/><path d="M6 9.2l2 2 4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Nothing is uploaded</li>
+        <li><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.2" stroke="currentColor" stroke-width="1.6"/><path d="M6 9.2l2 2 4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Free, no watermark</li>
+        <li><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.2" stroke="currentColor" stroke-width="1.6"/><path d="M6 9.2l2 2 4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>No sign-up</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" data-od-id="hero-visual">
+      <figure class="device" role="img" aria-label="E-reader displaying a pine-forest screensaver">
+        <div class="screen"><div class="forest" id="forest-scene"></div></div>
+        <span class="dot"></span>
+        <div class="device-badge"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 13V7l6-3.5L16 7v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.5h6v5H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 13h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Perfect fit · 1236 × 1648 px</span></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESIZER ================= -->
+<section class="resizer" id="resize" data-od-id="resizer-section" aria-labelledby="resize-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Resize an image</p>
+      <h2 id="resize-h">Fit your image to any e-reader</h2>
+      <p class="lead">Pick your device, drop in a photo, and the crop frame snaps to the exact screen ratio. No uploading, no account, no waiting.</p>
+    </div>
+
+    <div class="tool" id="tool" data-od-id="resize-tool">
+      <div class="tool-top">
+        <p class="caps" style="color:var(--muted)">Free converter · works 100% in your browser</p>
+        <span class="tool-status" id="device-status"><span class="pulse" aria-hidden="true"></span><span id="device-status-label">Kindle (11th Gen)·1072 × 1448 px</span></span>
+      </div>
+
+      <div class="tool-col">
+        <!-- Step 1: device -->
+        <div class="step-pane" data-od-id="step-device">
+          <div class="step-label">
+            <span class="num">1</span>
+            <h3>Select your device</h3>
+          </div>
+          <p class="step-desc">Choose a model or enter custom pixel dimensions.</p>
+          <div class="chip-grid" id="device-chips" role="group" aria-label="Choose e-reader model"></div>
+          <div class="custom-fields" id="custom-fields" hidden>
+            <div class="field">
+              <label for="custom-w">Width px</label>
+              <input type="number" id="custom-w" value="1404" min="100" max="4000" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="custom-h">Height px</label>
+              <input type="number" id="custom-h" value="1872" min="100" max="4000" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: upload + edit -->
+        <div class="step-pane" data-od-id="step-image">
+          <div class="step-label">
+            <span class="num">2</span>
+            <h3>Upload your image</h3>
+          </div>
+
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
+            <svg viewBox="0 0 38 38" fill="none" aria-hidden="true"><rect x="6" y="11" width="26" height="22" rx="3" stroke="currentColor" stroke-width="1.9"/><circle cx="14" cy="18" r="2.2" stroke="currentColor" stroke-width="1.7"/><path d="M9 29l8-8 5 5 4-4 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6v9M15.5 11L19 14l3.5-3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p class="dz-title">Drag and drop your image here</p>
+            <p class="dz-sub">or click to browse files</p>
+            <p class="dz-cell">JPG, PNG, GIF, WebP &nbsp;·&nbsp; up to 10 MB</p>
+            <input type="file" id="file-input" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
+          </div>
+          <p class="err-msg" id="err-msg" role="alert"></p>
+
+          <div class="preview-wrap" id="preview-wrap">
+            <div class="preview-frame-wrap">
+              <div class="frame" id="frame">
+                <canvas id="stage" aria-label="Preview of your resized image"></canvas>
+                <span class="hint" id="frame-hint" style="display:none">Drag to position</span>
+              </div>
+            </div>
+            <div class="edit-row" data-od-id="crop-controls">
+              <button class="zoom-btn" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+              <input type="range" class="zoom-range" id="zoom-range" min="1" max="6" step="0.02" value="1" aria-label="Zoom">
+              <button class="zoom-btn" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+              <span class="zoom-readout" id="zoom-readout">100%</span>
+              <button class="reset-link" id="zoom-reset">Reset view</button>
+            </div>
+            <p class="file-meta" id="file-meta"></p>
+          </div>
+
+          <div class="dl-bar">
+            <div class="dims" id="dl-meta">
+              Screensaver PNG · <span id="dl-dims">1072 × 1448 px</span>
+              <small id="dl-aspect">Aspect ratio 1 : 1.35</small>
+            </div>
+            <div class="dl-actions">
+              <button class="btn btn-ghost" id="btn-new" hidden>Choose a new image</button>
+              <button class="btn btn-primary" id="btn-download" data-od-id="download-btn" disabled>Download ready image</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="how" id="how" data-od-id="how-it-works" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">How it works</p>
+      <h2 id="how-h">Four steps, about two minutes, no account</h2>
+      <p class="lead">The whole pipeline stays on your computer — from the moment the image is picked until you save the finished file.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step-card" data-step="1" data-od-id="step-card-device">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.7"/><rect x="7.5" y="7" width="9" height="9" rx="1.4" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="18.2" r="0.9" fill="currentColor"/></svg></div>
+        <h3>Pick your e-reader</h3>
+        <p>Choose your model from the list, or type in custom pixel dimensions. The crop frame changes to match that screen's exact aspect ratio.</p>
+      </article>
+      <article class="step-card" data-step="2" data-od-id="step-card-upload">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V5M8.5 8.5 12 5l3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 14v5a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <h3>Upload your image</h3>
+        <p>Drag in a JPG, PNG, GIF or WebP. It is read straight into the browser — nothing is uploaded to a server.</p>
+      </article>
+      <article class="step-card" data-step="3" data-od-id="step-card-crop">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 5V3.5A1.5 1.5 0 0 1 8.5 2H20v11.5A1.5 1.5 0 0 1 18.5 15H17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 11H3V3.5A1.5 1.5 0 0 1 4.5 2H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,0)"/><path d="M15 13h6v7.5a1.5 1.5 0 0 1-1.5 1.5H9v-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 21.5v-6H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Crop and position</h3>
+        <p>Zoom and drag until the image sits how you want it inside the frame. The frame is locked to your device's ratio, so nothing gets stretched.</p>
+      </article>
+      <article class="step-card" data-step="4" data-od-id="step-card-download">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v11M8.5 11.5 12 15l3.5-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 16v3.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <h3>Download and transfer</h3>
+        <p>Get your image at the exact pixel resolution, then copy it to your e-reader using the setup guide for your model.</p>
+      </article>
+    </div>
+
+    <div class="device-strip" data-od-id="device-strip">
+      <div>
+        <h3>20+ devices, perfectly matched</h3>
+        <p>Kindle, Kobo, Boox, reMarkable, Nook and PocketBook — every screen ratio built in, from a 6-inch Clara to a 10-inch Scribe.</p>
+      </div>
+      <div class="device-chips">
+        <span class="dchip">Kindle</span><span class="dchip">Kobo</span><span class="dchip">reMarkable</span><span class="dchip">Boox</span><span class="dchip">Nook</span><span class="dchip">PocketBook</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" id="faq" data-od-id="faq-section" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="faq-intro">
+      <p class="kicker">FAQ</p>
+      <h2 id="faq-h">Common questions</h2>
+      <p>Setup varies a little between devices. The short guides below cover the three most popular routes.</p>
+      <p><a href="#resize">Still stuck? Resize an image first</a>, then follow the guide for your model.</p>
+    </div>
+
+    <div>
+      <details class="faq-item" open data-od-id="faq-item-privacy">
+        <summary>Are my images uploaded to a server?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><p><b>No.</b> All cropping and resizing happens locally in your browser using the canvas API. Your images are never transmitted to or stored on any server, and no account is required. Nothing is retained after you close the tab — and once the page is loaded, the tool keeps working even offline.</p></div>
+      </details>
+      <details class="faq-item" data-od-id="faq-item-kindle">
+        <summary>How do I set up custom screensavers on Kindle?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><p>Kindle doesn't officially support custom screensavers, but a common workaround uses a book cover that is actually your image:</p>
+        <ol>
+          <li>Resize your image here so it matches your Kindle model's dimensions.</li>
+          <li>Convert the PNG into an <b>EPUB file</b> with the image embedded as its cover (Calibre or an online converter works).</li>
+          <li>Send the EPUB to your Kindle via <b>Send to Kindle</b>.</li>
+          <li>On the device, enable <b>Settings → Device Options → Display Cover</b>.</li>
+          <li>Sync, open the “book”, and put your Kindle to sleep — your image appears on the lockscreen.</li>
+        </ol>
+        <p>This is a community workaround, and its effectiveness may vary by model and firmware.</p></div>
+      </details>
+      <details class="faq-item" data-od-id="faq-item-kobo">
+        <summary>How do I set up custom screensavers on Kobo?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><ol>
+          <li>Connect your Kobo to a computer via USB and tap <b>Connect</b> on the device.</li>
+          <li>Open the Kobo drive and go into the <b>.kobo</b> folder.</li>
+          <li>Create a new folder named exactly <b>screensaver</b>, and copy your downloaded images into it.</li>
+          <li>Safely eject, then open <b>Settings → Energy saving and privacy</b>.</li>
+          <li>Make sure <b>Show current read</b> and <b>Show book covers full screen</b> are both on, then put your Kobo to sleep.</li>
+        </ol></div>
+      </details>
+      <details class="faq-item" data-od-id="faq-item-koreader">
+        <summary>How do I set up custom screensavers in KOReader?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><ol>
+          <li>Connect your e-reader via USB and open the <b>.adds/koreader</b> folder on the device.</li>
+          <li>Create a folder such as <b>screensaver</b> and copy your images into it.</li>
+          <li>Safely eject, then in KOReader open <b>Settings → Screen → Sleep screen → Wallpaper</b>.</li>
+          <li>Choose a single custom image or a random folder, and point it at your new folder.</li>
+        </ol></div>
+      </details>
+      <details class="faq-item" data-od-id="faq-item-what">
+        <summary>What does this e-reader image resizer do?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><p>It resizes and positions images for e-reader screens. Pick your device, upload a photo, adjust the crop, and the tool outputs the image at the device's exact pixel dimensions and aspect ratio — so it always displays without stretching, cropping, or black bars.</p></div>
+      </details>
+      <details class="faq-item" data-od-id="faq-item-why">
+        <summary>Why should I resize images for my e-reader?<span class="plus" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></summary>
+        <div class="ans"><p>E-readers use specific screen dimensions and aspect ratios. Properly sized images display sharply and fill the screen edge to edge — which matters for cover images, wallpapers, and screensaver art. Off-size images get stretched, cropped, or show unwanted borders.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer data-od-id="footer">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="2" width="20" height="22" rx="3.5" stroke="currentColor" stroke-width="1.9"/><rect x="6" y="5.5" width="14" height="13" rx="1.6" fill="currentColor" opacity=".22"/><path d="M6 10.5h14M6 14h14" stroke="currentColor" stroke-width="1.6" opacity=".7"/><circle cx="19" cy="21.2" r="1.1" fill="currentColor"/></svg>
+        E-Reader Screensaver
+      </a>
+    </div>
+    <nav class="foot-col" aria-label="Quick links">
+      <h4>Quick links</h4>
+      <a href="#top">Home</a>
+      <a href="#resize">Image resizer</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <nav class="foot-col" aria-label="Legal">
+      <h4>Legal</h4>
+      <a href="#privacy-policy">Privacy Policy</a>
+      <a href="#terms-of-service">Terms of Service</a>
+    </nav>
+  </div>
+  <div class="foot-bottom">
+    <p>Copyright © 2026 · All rights reserved</p>
+    <p class="legal-notes">
+      <span id="privacy-policy">Your images never leave your browser.</span>
+      <span id="terms-of-service">Free to use · no sign-up required.</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ---------- hero forest scene (SVG) ---------- */
+(function(){
+  var NS="http://www.w3.org/2000/svg";
+  var host=document.getElementById("forest-scene");
+  if(!host) return;
+  var svg=document.createElementNS(NS,"svg");
+  svg.setAttribute("viewBox","0 0 400 533");
+  svg.setAttribute("preserveAspectRatio","xMidYMid slice");
+  host.appendChild(svg);
+
+  var defs=document.createElementNS(NS,"defs");
+  svg.appendChild(defs);
+
+  var bgGrad=document.createElementNS(NS,"linearGradient");
+  bgGrad.id="sky";bgGrad.setAttribute("x1","0");bgGrad.setAttribute("y1","0");bgGrad.setAttribute("x2","0");bgGrad.setAttribute("y2","1");
+  bgGrad.innerHTML='<stop offset="0" stop-color="#1b2f2b"/><stop offset=".55" stop-color="#223935"/><stop offset="1" stop-color="#2c443c"/>';
+  defs.appendChild(bgGrad);
+
+  var dust=document.createElementNS(NS,"radialGradient");
+  dust.id="moon";dust.innerHTML='<stop offset="0" stop-color="#eddcae" stop-opacity=".95"/><stop offset=".45" stop-color="#e3cf9c" stop-opacity=".4"/><stop offset="1" stop-color="#e3cf9c" stop-opacity="0"/>';
+  defs.appendChild(dust);
+
+  var glow=document.createElementNS(NS,"filter");glow.id="soft";
+  glow.innerHTML='<feGaussianBlur stdDeviation="6"/>';
+  defs.appendChild(glow);
+
+  svg.insertAdjacentHTML("beforeend",'<rect width="400" height="533" fill="url(#sky)"/>'+
+  '<circle cx="296" cy="92" r="60" fill="url(#moon)"/>'+
+  '<circle cx="296" cy="92" r="26" fill="#eddcae" opacity=".92"/>'+
+  '<circle cx="120" cy="150" r="1.4" fill="#d9cd9f" opacity=".7"/><circle cx="348" cy="180" r="1.1" fill="#d9cd9f" opacity=".55"/><circle cx="86" cy="96" r="1" fill="#d9cd9f" opacity=".6"/><circle cx="232" cy="70" r="1.2" fill="#d9cd9f" opacity=".5"/>');
+
+  var SYMBOL=document.createElementNS(NS,"symbol");SYMBOL.id="pine";SYMBOL.setAttribute("viewBox","-50 -70 100 170");
+  SYMBOL.innerHTML='<path d="M0,-58 L30,-6 L-30,-6 Z"/><path d="M0,-28 L37,22 L-37,22 Z"/><path d="M0,4 L44,64 L-44,64 Z"/><rect x="-3" y="64" width="6" height="46"/>';
+  defs.appendChild(SYMBOL);
+
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+  var layers=[
+    {s:0.55,r:0.75},{s:0.85,r:0.65},
+    {s:1.1,r:0.5},{s:1.5,r:0.35}
+  ];
+  var palette=["#4d6157","#3a4f46","#2c423a","#21352f"];
+
+  for(var l=0;l<layers.length;l++){
+    var rnd=mulberry32(11+ l*97);
+    var n=6+Math.floor(rnd()*3);
+    var round=10+l*14;
+    for(var i=0;i<n;i++){
+      var s=layers[l].s+rnd()*layers[l].r;
+      var x=-30+rnd()*460;
+      var use=document.createElementNS(NS,"use");
+      use.setAttribute("href","#pine");
+      use.setAttribute("transform","translate("+x.toFixed(1)+","+round+") scale("+s.toFixed(3)+")");
+      use.setAttribute("fill",palette[l]);
+      svg.appendChild(use);
+    }
+  }
+
+  svg.insertAdjacentHTML("beforeend",
+    '<ellipse cx="128" cy="500" rx="58" ry="16" fill="#e8b35a" opacity=".18" filter="url(#soft)"/>'+
+    '<circle cx="128" cy="488" r="26" fill="#efbe6c" opacity=".34" filter="url(#soft)"/>'+
+    '<circle cx="128" cy="488" r="7" fill="#f4c87e" opacity=".9"/>'+
+    '<rect x="125" y="492" width="6" height="30" fill="#162420" opacity=".9"/>'+
+    '<g fill="#eddcae">'+
+    '<circle cx="252" cy="420" r="1.6" opacity=".85"><animate attributeName="opacity" values=".85;.25;.85" dur="3.1s" repeatCount="indefinite"/></circle>'+
+    '<circle cx="204" cy="368" r="1.3" opacity=".6"><animate attributeName="opacity" values=".6;.15;.6" dur="2.6s" repeatCount="indefinite"/></circle>'+
+    '<circle cx="310" cy="452" r="1.4" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.8s" repeatCount="indefinite"/></circle>'+
+    '<circle cx="88" cy="352" r="1.2" opacity=".55"><animate attributeName="opacity" values=".55;.15;.55" dur="2.9s" repeatCount="indefinite"/></circle>'+
+    '<circle cx="272" cy="330" r="1" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="3.4s" repeatCount="indefinite"/></circle>'+
+    '</g>');
+})();
+
+/* ---------- resizer tool ---------- */
+(function(){
+  var DEVICES=[
+    {id:"kindle-11", name:"Kindle 11", screen:"6-inch", w:1072, h:1448},
+    {id:"kindle-pw12", name:"Kindle PW 12", screen:"7-inch", w:1264, h:1680},
+    {id:"kindle-pw11", name:"Kindle PW 11", screen:"6.8-inch", w:1236, h:1648},
+    {id:"kindle-oasis", name:"Kindle Oasis", screen:"7-inch", w:1264, h:1680},
+    {id:"kindle-scribe", name:"Kindle Scribe", screen:"10.2-inch", w:1860, h:2480},
+    {id:"kobo-clara-bw", name:"Kobo Clara BW", screen:"6-inch", w:1072, h:1448},
+    {id:"kobo-clara-colour", name:"Kobo Clara Colour", screen:"6-inch", w:1072, h:1448},
+    {id:"kobo-libra2", name:"Kobo Libra 2", screen:"7-inch", w:1264, h:1680},
+    {id:"kobo-sage", name:"Kobo Sage", screen:"8-inch", w:1440, h:1920},
+    {id:"remarkable-2", name:"reMarkable 2", screen:"10.3-inch", w:1404, h:1872},
+    {id:"boox-palma", name:"Boox Palma", screen:"6.1-inch", w:824, h:1648},
+    {id:"boox-note", name:"Boox Note Air", screen:"10.3-inch", w:1404, h:1872},
+    {id:"nook-gl4", name:"Nook GlowLight 4", screen:"6-inch", w:1072, h:1448},
+    {id:"pocketbook-era", name:"PocketBook Era", screen:"7-inch", w:1264, h:1680},
+    {id:"custom", name:"Custom device", screen:"any size", w:0, h:0}
+  ];
+  var state={
+    dev:DEVICES[0],
+    img:null, imgW:0, imgH:0,
+    zoom:1, dx:0, dy:0, fit:1,
+    loaded:false
+  };
+
+  var $=function(id){return document.getElementById(id)};
+  var chips=$("device-chips"), statusLabel=$("device-status-label"),
+      status=$("device-status"), customFields=$("custom-fields"),
+      cw=$("custom-w"), ch=$("custom-h"),
+      dz=$("dropzone"), fileInput=$("file-input"), err=$("err-msg"),
+      wrapPre=$("preview-wrap"), frame=$("frame"), stage=$("stage"),
+      zoomRange=$("zoom-range"), zoomOut=$("zoom-out"), zoomIn=$("zoom-in"),
+      zoomReset=$("zoom-reset"), zoomReadout=$("zoom-readout"),
+      fileMeta=$("file-meta"), dlDims=$("dl-dims"), dlAspect=$("dl-aspect"),
+      btnDl=$("btn-download"), btnNew=$("btn-new"), hint=$("frame-hint");
+
+  function aspectLabel(d){
+    var r=d.h/d.w;
+    return "Aspect ratio 1 : "+r.toFixed(2);
+  }
+  function setDevice(d){
+    state.dev=d;
+    renderChips();
+    if(d.w){
+      statusLabel.textContent=d.name+" · "+d.w+" × "+d.h+" px";
+      dlDims.textContent=d.w+" × "+d.h+" px";
+      dlAspect.textContent=aspectLabel(d);
+    }else{
+      var w=+cw.value,h=+ch.value;
+      statusLabel.textContent="Custom · "+w+" × "+h+" px";
+      dlDims.textContent=w+" × "+h+" px";
+      dlAspect.textContent=aspectLabel({w:w,h:h});
+    }
+    frame.style.aspectRatio=state.dev.w?state.dev.w+"/"+state.dev.h:(+cw.value)+"/"+(+ch.value);
+    render();
+  }
+  function renderChips(){
+    chips.innerHTML="";
+    DEVICES.forEach(function(d){
+      var b=document.createElement("button");
+      b.type="button";b.className="chip";
+      b.setAttribute("aria-pressed",state.dev.id===d.id?"true":"false");
+      b.setAttribute("data-od-id","device-chip-"+d.id);
+      b.innerHTML='<span class="nm"></span><span class="sc"></span>';
+      b.querySelector(".nm").textContent=d.name;
+      b.querySelector(".sc").textContent=state.dev.id===d.id&&d.id!=="custom" ? d.w+" × "+d.h+" px" : d.screen;
+      b.addEventListener("click",function(){setDevice(d)});
+      chips.appendChild(b);
+    });
+    customFields.hidden=state.dev.id!=="custom";
+  }
+
+  cw.addEventListener("input",function(){if(state.dev.id==="custom")setDevice(state.dev)});
+  ch.addEventListener("input",function(){if(state.dev.id==="custom")setDevice(state.dev)});
+
+  /* ---- upload ---- */
+  function handleFile(file){
+    err.textContent="";
+    if(!file){return}
+    var okType=["image/jpeg","image/png","image/gif","image/webp"];
+    if(okType.indexOf(file.type)===-1){err.textContent="Unsupported file type — please use JPG, PNG, GIF or WebP.";return}
+    if(file.size>10*1024*1024){err.textContent="File is larger than 10 MB — please pick a smaller image.";return}
+    var url=URL.createObjectURL(file);
+    var im=new Image();
+    im.onload=function(){
+      state.img=im;state.imgW=im.naturalWidth;state.imgH=im.naturalHeight;
+      state.zoom=1;state.dx=0;state.dy=0;state.loaded=true;
+      dz.style.display="none";
+      fileMeta.innerHTML="Loaded <b>"+(file.name.length>34?file.name.slice(0,34)+"…":file.name)+"</b> · "+state.imgW+" × "+state.imgH+" px (source)";
+      wrapPre.classList.add("on");
+      btnNew.hidden=false;
+      btnDl.disabled=false;
+      frame.style.aspectRatio=state.dev.w?state.dev.w+"/"+state.dev.h:(+cw.value)+"/"+(+ch.value);
+      requestAnimationFrame(render);
+    };
+    im.onerror=function(){err.textContent="Could not read that image file, please try another."};
+    im.src=url;
+  }
+  dz.addEventListener("click",function(){fileInput.click()});
+  dz.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();fileInput.click()}});
+  fileInput.addEventListener("change",function(){handleFile(fileInput.files[0])});
+  ["dragover","dragenter"].forEach(function(ev){
+    dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add("drag")});
+  });
+  ["dragleave","drop"].forEach(function(ev){
+    dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove("drag")});
+  });
+  dz.addEventListener("drop",function(e){handleFile(e.dataTransfer.files[0])});
+
+  /* ---- render / crop ---- */
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function render(){
+    var cW=frame.clientWidth,cH=frame.clientHeight;
+    if(cW<50||cH<50)return;
+    var dpr=window.devicePixelRatio||1;
+    stage.width=Math.round(cW*dpr);
+    stage.height=Math.round(cH*dpr);
+    var ctx=stage.getContext("2d");
+    ctx.clearRect(0,0,stage.width,stage.height);
+    if(!state.img){return}
+    var W=stage.width,H=stage.height;
+    var fit=Math.max(W/state.imgW,H/state.imgH);
+    var scale=fit*state.zoom;
+    var dw=state.imgW*scale,dh=state.imgH*scale;
+    var maxDx=(dw-W)/2;
+    var baseDx=(W-dw)/2;
+    state.dx=clamp(state.dx,baseDx,maxDx);
+    var baseDy=(H-dh)/2;
+    state.dy=clamp(state.dy,baseDy,(dh-H)/2);
+    var x=baseDx+state.dx, y=baseDy+state.dy;
+    ctx.drawImage(state.img,0,0,state.imgW,state.imgH,x,y,dw,dh);
+    hint.style.display = state.zoom>1.001 ? "" : "none";
+  }
+  function exportImage(){
+    if(!state.loaded)return;
+    var dev=state.dev;
+    var W=state.dev.w||+cw.value,H=state.dev.h||+ch.value;
+    var fit=Math.max(stage.width/state.imgW,stage.height/state.imgH);
+    var s=fit*state.zoom;
+    var baseDx=(stage.width-state.imgW*s)/2+state.dx;
+    var baseDy=(stage.height-state.imgH*s)/2+state.dy;
+    var sx=Math.max(0,-baseDx/s), sy=Math.max(0,-baseDy/s);
+    var sw=Math.min(state.imgW,stage.width/s), sh=Math.min(state.imgH,stage.height/s);
+    var out=document.createElement("canvas");
+    out.width=W;out.height=H;
+    out.getContext("2d").drawImage(state.img,sx,sy,sw,sh,0,0,W,H);
+    out.toBlob(function(blob){
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="screensaver-"+dev.id+"-"+W+"x"+H+".png";
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+    },"image/png");
+  }
+
+  /* ---- drag to pan ---- */
+  var dragging=false,sx0=0,sy0=0,ox0=0,oy0=0;
+  frame.addEventListener("pointerdown",function(e){
+    if(!state.loaded)return;
+    dragging=true;frame.setPointerCapture(e.pointerId);
+    sx0=e.clientX;sy0=e.clientY;ox0=state.dx;oy0=state.dy;
+    stage.style.cursor="grabbing";
+  });
+  frame.addEventListener("pointermove",function(e){
+    if(!dragging)return;
+    var dpr=window.devicePixelRatio||1;
+    state.dx=ox0+(e.clientX-sx0)*dpr;
+    state.dy=oy0+(e.clientY-sy0)*dpr;
+    render();
+  });
+  frame.addEventListener("pointerup",function(e){dragging=false;stage.style.cursor=""});
+  frame.addEventListener("pointercancel",function(){dragging=false;stage.style.cursor=""});
+
+  /* ---- zoom ---- */
+  function setZoom(z){
+    state.zoom=clamp(z,1,6);
+    zoomRange.value=state.zoom;
+    zoomReadout.textContent=Math.round(state.zoom*100)+"%";
+    render();
+  }
+  zoomRange.addEventListener("input",function(){setZoom(+this.value)});
+  zoomOut.addEventListener("click",function(){setZoom(state.zoom-0.2)});
+  zoomIn.addEventListener("click",function(){setZoom(state.zoom+0.2)});
+  zoomReset.addEventListener("click",function(){state.zoom=1;state.dx=0;state.dy=0;setZoom(1)});
+  btnDl.addEventListener("click",exportImage);
+  btnNew.addEventListener("click",function(){
+    state.loaded=false;wrapPre.classList.remove("on");dz.style.display="flex";
+    btnNew.hidden=true;btnDl.disabled=true;fileMeta.textContent="";err.textContent="";
+    state.img=null;state.zoom=1;
+  });
+
+  var rt;
+  window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(render,120)});
+
+  setZoom(1);
+  setDevice(DEVICES[0]);
+})();
+</script>
+</body>
+</html>

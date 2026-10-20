@@ -66,7 +66,7 @@ for (const entry of cases) {
     const reference = pillowReference(entry)
 
     await page.goto('/')
-    await page.selectOption('select.select', entry.model)
+    await page.locator(`[data-slug="${entry.model}"]`).click()
     if (!entry.grayscale) {
       await page.getByRole('checkbox').uncheck()
     }

@@ -10,11 +10,11 @@ interface WorkerScope {
 const scope = self as unknown as WorkerScope
 
 scope.onmessage = (event) => {
-  const { id, file, width, height, grayscale } = event.data
+  const { id, file, width, height, grayscale, crop } = event.data
 
   void (async () => {
     try {
-      const result = await processBlob(file, { width, height, grayscale })
+      const result = await processBlob(file, { width, height, grayscale, crop })
       const png = toArrayBuffer(result.png)
       scope.postMessage(
         {

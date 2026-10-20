@@ -9,9 +9,10 @@ import {
 interface DropZoneProps {
   onFiles: (result: IntakeResult) => void
   disabled?: boolean
+  compact?: boolean
 }
 
-export function DropZone({ onFiles, disabled = false }: DropZoneProps) {
+export function DropZone({ onFiles, disabled = false, compact = false }: DropZoneProps) {
   const [dragging, setDragging] = useState(false)
   const [reading, setReading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -50,7 +51,7 @@ export function DropZone({ onFiles, disabled = false }: DropZoneProps) {
 
   return (
     <div
-      className={`dropzone${dragging ? ' is-dragging' : ''}`}
+      className={`dropzone${dragging ? ' is-dragging' : ''}${compact ? ' is-compact' : ''}`}
       onDrop={onDrop}
       onDragOver={onDragOver}
       onDragLeave={() => setDragging(false)}
@@ -58,12 +59,29 @@ export function DropZone({ onFiles, disabled = false }: DropZoneProps) {
         if (!disabled && !reading) fileInput.current?.click()
       }}
     >
-      <p className="dropzone__title">
-        {reading ? 'Reading folder…' : 'Drop photos or a folder'}
-      </p>
-      <p className="dropzone__hint">
-        JPG, PNG, WebP or BMP. Nested folders keep their structure.
-      </p>
+      <svg className="dropzone__icon" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <rect x="6" y="11" width="26" height="22" rx="3" stroke="currentColor" strokeWidth="1.9" />
+        <circle cx="14" cy="18" r="2.2" stroke="currentColor" strokeWidth="1.7" />
+        <path
+          d="M9 29l8-8 5 5 4-4 5 5M19 6v9M15.5 11L19 14l3.5-3"
+          stroke="currentColor"
+          strokeWidth="1.9"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+
+      <div className="dropzone__copy">
+        <p className="dropzone__title">
+          {reading ? 'Reading folder…' : 'Drop photos or a folder'}
+        </p>
+        <p className="dropzone__hint">
+          JPG, PNG, WebP or BMP. Nested folders keep their structure.
+        </p>
+        {!compact && (
+          <p className="dropzone__cell">Drop anywhere on this panel, or choose below.</p>
+        )}
+      </div>
 
       <div className="dropzone__actions">
         <button

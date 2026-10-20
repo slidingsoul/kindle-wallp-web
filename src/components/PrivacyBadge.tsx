@@ -10,34 +10,59 @@ export function PrivacyBadge() {
   const mountedAt = useRef(0)
 
   useEffect(() => {
-    mountedAt.current = performance.now()
-    const flagged: string[] = []
-
     if (typeof PerformanceObserver === 'undefined') return
 
-    const observer = new PerformanceObserver((list) => {
-      let changed = false
+    const flagged: string[] = []
+    let observer: PerformanceObserver | null = null
+    let cancelled = false
 
-      for (const entry of list.getEntries()) {
-        if (entry.startTime < mountedAt.current) continue
-        if (/^(blob:|data:|about:)/.test(entry.name)) continue
-        if (entry.name === location.href) continue
-        if (flagged.includes(entry.name)) continue
-        flagged.push(entry.name)
-        changed = true
+    const start = () => {
+      if (cancelled) return
+      mountedAt.current = performance.now()
+
+      observer = new PerformanceObserver((list) => {
+        let changed = false
+
+        for (const entry of list.getEntries()) {
+          if (entry.startTime < mountedAt.current) continue
+          if (/^(blob:|data:|about:)/.test(entry.name)) continue
+          if (entry.name === location.href) continue
+          if (flagged.includes(entry.name)) continue
+          flagged.push(entry.name)
+          changed = true
+        }
+
+        if (changed) setExternal([...flagged])
+      })
+
+      try {
+        observer.observe({ type: 'resource' })
+      } catch {
+        // Older browsers may not support resource observation.
       }
-
-      if (changed) setExternal([...flagged])
-    })
-
-    try {
-      observer.observe({ type: 'resource' })
-    } catch {
-      // Older browsers may not support resource observation.
-      return
     }
 
-    return () => observer.disconnect()
+    // Self-hosted fonts (and the initial page load) are part of the app, not
+    // an upload. Baseline only once they have finished.
+    const fontsReady =
+      typeof document !== 'undefined' && document.fonts
+        ? document.fonts.ready
+        : Promise.resolve()
+    const pageReady =
+      document.readyState === 'complete'
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            window.addEventListener('load', () => resolve(), { once: true })
+          })
+
+    void Promise.all([fontsReady, pageReady]).then(() => {
+      requestAnimationFrame(start)
+    })
+
+    return () => {
+      cancelled = true
+      observer?.disconnect()
+    }
   }, [])
 
   const ok = external.length === 0

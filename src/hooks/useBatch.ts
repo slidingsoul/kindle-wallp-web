@@ -1,4 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  cropsEqual,
+  normalizeCrop,
+  type CropTransform,
+} from '../lib/geometry'
 import { DEFAULT_MODEL_SLUG, getModel, MODELS_BY_SLUG } from '../lib/models'
 import { ImageProcessor, bytesToPngBlob } from '../lib/processor'
 import { replaceExtension, uniquePath } from '../lib/paths'
@@ -30,6 +35,8 @@ export interface Job {
   /** Output path inside the ZIP or chosen folder. */
   outputPath: string
   status: JobStatus
+  /** User framing; undefined means the centred cover crop. */
+  crop?: CropTransform
   result?: JobResult
   error?: string
 }
@@ -137,20 +144,28 @@ export function useBatch() {
 
         patchJob(job.id, { status: 'processing', error: undefined })
         const model = getModel(modelRef.current)
+        const snapshot = job.crop
 
         try {
           const result = await processorRef.current!.process(job.file, {
             width: model.width,
             height: model.height,
             grayscale: grayscaleRef.current,
+            crop: snapshot,
           })
 
           if (generationRef.current !== generation) break
 
           // The job may have been removed while it was being processed.
-          if (!jobsRef.current.some((candidate) => candidate.id === job.id)) {
-            continue
-          }
+          const latest = jobsRef.current.find(
+            (candidate) => candidate.id === job.id,
+          )
+          if (!latest) continue
+
+          // Framing changed mid-flight: leave it queued so the new crop wins.
+          if (!cropsEqual(latest.crop, snapshot)) continue
+
+          if (latest.result) URL.revokeObjectURL(latest.result.url)
 
           const blob = bytesToPngBlob(result.png)
           const url = URL.createObjectURL(blob)
@@ -229,8 +244,8 @@ export function useBatch() {
   )
 
   const addFiles = useCallback(
-    (incoming: readonly IntakeFile[]) => {
-      if (incoming.length === 0) return
+    (incoming: readonly IntakeFile[]): string[] => {
+      if (incoming.length === 0) return []
 
       const taken = new Set(jobsRef.current.map((job) => job.outputPath))
       const additions: Job[] = incoming.map(({ file, path }) => ({
@@ -242,6 +257,40 @@ export function useBatch() {
       }))
 
       commit((current) => [...current, ...additions])
+      void pump()
+      return additions.map((job) => job.id)
+    },
+    [commit, pump],
+  )
+
+  const setCrop = useCallback(
+    (id: string, crop: CropTransform) => {
+      const current = jobsRef.current.find((job) => job.id === id)
+      const next = normalizeCrop(crop)
+      if (!current || cropsEqual(current.crop, next)) return
+
+      commit((jobs) =>
+        jobs.map((job) =>
+          job.id === id
+            ? { ...job, crop: next, status: 'queued', error: undefined }
+            : job,
+        ),
+      )
+      void pump()
+    },
+    [commit, pump],
+  )
+
+  const applyCropToAll = useCallback(
+    (crop: CropTransform) => {
+      const next = normalizeCrop(crop)
+      commit((jobs) =>
+        jobs.map((job) =>
+          cropsEqual(job.crop, next)
+            ? job
+            : { ...job, crop: next, status: 'queued', error: undefined },
+        ),
+      )
       void pump()
     },
     [commit, pump],
@@ -371,6 +420,8 @@ export function useBatch() {
     chooseModel,
     chooseGrayscale,
     addFiles,
+    setCrop,
+    applyCropToAll,
     removeJob,
     clearAll,
     reprocess: restart,
