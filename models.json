@@ -1,0 +1,179 @@
+{
+  "models": [
+    {
+      "slug": "kindle-11th-gen",
+      "width": 1072,
+      "height": 1448,
+      "name": "Kindle (11th Gen)",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-paperwhite-12th-gen",
+      "width": 1264,
+      "height": 1680,
+      "name": "Kindle Paperwhite (12th Gen)",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-paperwhite-11th-gen",
+      "width": 1236,
+      "height": 1648,
+      "name": "Kindle Paperwhite (11th Gen)",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-paperwhite-10th-gen",
+      "width": 1072,
+      "height": 1448,
+      "name": "Kindle Paperwhite (10th Gen)",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-oasis-3rd-gen",
+      "width": 1264,
+      "height": 1680,
+      "name": "Kindle Oasis (3rd Gen)",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-scribe",
+      "width": 1860,
+      "height": 2480,
+      "name": "Kindle Scribe",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kindle-colorsoft",
+      "width": 1264,
+      "height": 1680,
+      "name": "Kindle Colorsoft",
+      "brand": "Amazon"
+    },
+    {
+      "slug": "kobo-nia",
+      "width": 758,
+      "height": 1024,
+      "name": "Kobo Nia",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-clara-bw",
+      "width": 1072,
+      "height": 1448,
+      "name": "Kobo Clara BW",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-clara-2e",
+      "width": 1072,
+      "height": 1448,
+      "name": "Kobo Clara 2E / Clara HD",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-clara-colour",
+      "width": 1072,
+      "height": 1448,
+      "name": "Kobo Clara Colour",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-libra-2",
+      "width": 1264,
+      "height": 1680,
+      "name": "Kobo Libra 2 / Libra H2O",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-libra-colour",
+      "width": 1264,
+      "height": 1680,
+      "name": "Kobo Libra Colour",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-sage",
+      "width": 1440,
+      "height": 1920,
+      "name": "Kobo Sage",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "kobo-elipsa-2e",
+      "width": 1404,
+      "height": 1872,
+      "name": "Kobo Elipsa 2E",
+      "brand": "Kobo"
+    },
+    {
+      "slug": "remarkable-2",
+      "width": 1404,
+      "height": 1872,
+      "name": "reMarkable 2",
+      "brand": "reMarkable"
+    },
+    {
+      "slug": "remarkable-paper-pro",
+      "width": 1620,
+      "height": 2160,
+      "name": "reMarkable Paper Pro",
+      "brand": "reMarkable"
+    },
+    {
+      "slug": "boox-palma",
+      "width": 824,
+      "height": 1648,
+      "name": "Boox Palma",
+      "brand": "Boox"
+    },
+    {
+      "slug": "boox-page",
+      "width": 1264,
+      "height": 1680,
+      "name": "Boox Page",
+      "brand": "Boox"
+    },
+    {
+      "slug": "boox-note-air",
+      "width": 1404,
+      "height": 1872,
+      "name": "Boox Note Air Series",
+      "brand": "Boox"
+    },
+    {
+      "slug": "boox-tab-ultra",
+      "width": 1404,
+      "height": 1872,
+      "name": "Boox Tab Ultra Series",
+      "brand": "Boox"
+    },
+    {
+      "slug": "nook-glowlight-4",
+      "width": 1072,
+      "height": 1448,
+      "name": "Nook GlowLight 4",
+      "brand": "B&N"
+    },
+    {
+      "slug": "nook-glowlight-4e",
+      "width": 758,
+      "height": 1024,
+      "name": "Nook GlowLight 4e",
+      "brand": "B&N"
+    },
+    {
+      "slug": "pocketbook-era",
+      "width": 1264,
+      "height": 1680,
+      "name": "PocketBook Era",
+      "brand": "PocketBook"
+    },
+    {
+      "slug": "pocketbook-inkpad-4",
+      "width": 1404,
+      "height": 1872,
+      "name": "PocketBook InkPad 4 / Color 3",
+      "brand": "PocketBook"
+    }
+  ]
+}
